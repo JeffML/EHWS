@@ -4,10 +4,12 @@ exports.handler = async (event, context) => {
   // Get environment variables
   const API_KEY = process.env.API_KEY;
   const DEVICE_ID = process.env.DEVICE_ID;
+  const TZ = process.env.TZ || 'America/New_York';
 
   console.log("Environment check:", {
     hasApiKey: !!API_KEY,
     hasDeviceId: !!DEVICE_ID,
+    timezone: TZ,
   });
 
   if (!API_KEY || !DEVICE_ID) {
@@ -28,7 +30,9 @@ exports.handler = async (event, context) => {
   // Function to fetch rainfall for a specific day
   const getRainfallForDay = (daysAgo) => {
     return new Promise((resolve, reject) => {
-      const now = new Date();
+      // Get current time in the specified timezone
+      const nowStr = new Date().toLocaleString('en-US', { timeZone: TZ });
+      const now = new Date(nowStr);
 
       // Calculate 7am for the day (daysAgo + 1) to 7am for the day (daysAgo)
       const startDate = new Date(
