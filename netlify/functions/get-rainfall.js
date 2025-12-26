@@ -62,6 +62,12 @@ exports.handler = async (event, context) => {
             try {
               const json = JSON.parse(data);
 
+              console.log(`Day ${daysAgo} response:`, {
+                hasObs: !!json.obs,
+                obsCount: json.obs?.length || 0,
+                status: json.status
+              });
+
               if (!json.obs || json.obs.length === 0) {
                 resolve({
                   date: endDate.toLocaleDateString(),
