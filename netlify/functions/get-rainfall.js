@@ -30,35 +30,23 @@ exports.handler = async (event, context) => {
   // Function to fetch rainfall for a specific day
   const getRainfallForDay = (daysAgo) => {
     return new Promise((resolve, reject) => {
-      // Get current time in the specified timezone
-      const nowStr = new Date().toLocaleString('en-US', { timeZone: TZ });
-      const now = new Date(nowStr);
-
-      // Calculate 7am for the day (daysAgo + 1) to 7am for the day (daysAgo)
-      const startDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() - daysAgo - 1,
-        7,
-        0,
-        0,
-        0
-      );
-
-      const endDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() - daysAgo,
-        7,
-        0,
-        0,
-        0
-      );
-
+      const now = new Date();
+      
+      // Get the current date in the target timezone
+      const dateInTZ = new Date(now.toLocaleString('en-US', { timeZone: TZ }));
+      
+      // Calculate 7am dates
+      const endDate = new Date(dateInTZ);
+      endDate.setDate(endDate.getDate() - daysAgo);
+      endDate.setHours(7, 0, 0, 0);
+      
+      const startDate = new Date(endDate);
+      startDate.setDate(startDate.getDate() - 1);
+      
       const timeStart = Math.floor(startDate.getTime() / 1000);
       const timeEnd = Math.floor(endDate.getTime() / 1000);
 
-      console.log(`Day ${daysAgo}: ${startDate.toISOString()} to ${endDate.toISOString()}`);
+      console.log(`Day ${daysAgo}: ${startDate.toISOString()} to ${endDate.toISOString()} (timestamps: ${timeStart} to ${timeEnd})`);
 
       const url = `https://swd.weatherflow.com/swd/rest/observations/device/${DEVICE_ID}?time_start=${timeStart}&time_end=${timeEnd}&api_key=${API_KEY}`;
 
