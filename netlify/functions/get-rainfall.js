@@ -5,10 +5,20 @@ exports.handler = async (event, context) => {
   const API_KEY = process.env.API_KEY;
   const DEVICE_ID = process.env.DEVICE_ID;
 
+  console.log('Environment check:', { 
+    hasApiKey: !!API_KEY, 
+    hasDeviceId: !!DEVICE_ID 
+  });
+
   if (!API_KEY || !DEVICE_ID) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Missing API_KEY or DEVICE_ID environment variables' })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        error: 'Missing API_KEY or DEVICE_ID environment variables',
+        hasApiKey: !!API_KEY,
+        hasDeviceId: !!DEVICE_ID
+      })
     };
   }
 
@@ -117,9 +127,14 @@ exports.handler = async (event, context) => {
     };
 
   } catch (error) {
+    console.error('Error fetching rainfall:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        error: error.message,
+        stack: error.stack
+      })
     };
   }
 };

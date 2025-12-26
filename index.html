@@ -154,16 +154,25 @@
             try {
                 const response = await fetch('/.netlify/functions/get-rainfall?days=7');
                 
+                const data = await response.json();
+                
                 if (!response.ok) {
-                    throw new Error('Failed to fetch data');
+                    throw new Error(data.error || 'Failed to fetch data');
                 }
 
-                const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
                 displayRainfallData(data);
                 
             } catch (error) {
                 document.getElementById('content').innerHTML = 
-                    `<div class="error">Error loading rainfall data: ${error.message}</div>`;
+                    `<div class="error">
+                        <strong>Error loading rainfall data:</strong><br>
+                        ${error.message}<br><br>
+                        <small>Please check that environment variables (API_KEY and DEVICE_ID) are set in Netlify.</small>
+                    </div>`;
             }
         }
 
