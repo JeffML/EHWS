@@ -18,8 +18,8 @@ In your Netlify site dashboard:
 
 1. Go to **Site settings** > **Environment variables**
 2. Add the following variables:
-   - `API_KEY`: Your Tempest API key (e.g., `1d0f5d0f-4b66-4f8f-b454-99a57ffe0831`)
-   - `DEVICE_ID`: Your Tempest device ID (e.g., `470287`)
+   - `API_KEY`: Your Tempest API key
+   - `DEVICE_ID`: Your Tempest device ID
 
 ### 3. Deploy
 
