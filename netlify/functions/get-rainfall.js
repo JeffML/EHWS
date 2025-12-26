@@ -54,6 +54,8 @@ exports.handler = async (event, context) => {
       const timeStart = Math.floor(startDate.getTime() / 1000);
       const timeEnd = Math.floor(endDate.getTime() / 1000);
 
+      console.log(`Day ${daysAgo}: ${startDate.toISOString()} to ${endDate.toISOString()}`);
+
       const url = `https://swd.weatherflow.com/swd/rest/observations/device/${DEVICE_ID}?time_start=${timeStart}&time_end=${timeEnd}&api_key=${API_KEY}`;
 
       https
@@ -86,6 +88,8 @@ exports.handler = async (event, context) => {
               });
 
               const totalRainInches = totalRainMM / 25.4;
+
+              console.log(`Day ${daysAgo}: Found ${json.obs.length} observations, total rain: ${totalRainMM}mm (${totalRainInches.toFixed(2)} inches)`);
 
               resolve({
                 date: endDate.toLocaleDateString(),
