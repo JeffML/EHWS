@@ -1,212 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Elderly Hillberry Weather Station</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        max-width: 800px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+      }
+
+      .current-time {
+        text-align: center;
+        color: #666;
+        font-size: 1.2em;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #eee;
+      }
+
+      .loading {
+        text-align: center;
+        color: #666;
+        font-size: 1.1em;
+        padding: 40px;
+      }
+
+      .error {
+        text-align: center;
+        color: #d32f2f;
+        font-size: 1.1em;
+        padding: 40px;
+        background: #ffebee;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+
+      .rainfall-list {
+        list-style: none;
+      }
+
+      .rainfall-item {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        border-left: 5px solid #667eea;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .rainfall-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .rainfall-item.today {
+        border-left-color: #4caf50;
+        background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%);
+      }
+
+      .day-label {
+        font-weight: bold;
+        color: #333;
+        font-size: 1.2em;
+        margin-bottom: 5px;
+      }
+
+      .rainfall-amount {
+        font-size: 2em;
+        color: #667eea;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .rainfall-item.today .rainfall-amount {
+        color: #4caf50;
+      }
+
+      .time-range {
+        color: #999;
+        font-size: 0.9em;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #999;
+        margin-bottom: 30px;
+        font-size: 1.1em;
+      }
+
+      @media (max-width: 600px) {
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
+          padding: 20px;
         }
 
         h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-
-        .current-time {
-            text-align: center;
-            color: #666;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .loading {
-            text-align: center;
-            color: #666;
-            font-size: 1.1em;
-            padding: 40px;
-        }
-
-        .error {
-            text-align: center;
-            color: #d32f2f;
-            font-size: 1.1em;
-            padding: 40px;
-            background: #ffebee;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .rainfall-list {
-            list-style: none;
-        }
-
-        .rainfall-item {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            border-left: 5px solid #667eea;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .rainfall-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .rainfall-item.today {
-            border-left-color: #4caf50;
-            background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%);
-        }
-
-        .day-label {
-            font-weight: bold;
-            color: #333;
-            font-size: 1.2em;
-            margin-bottom: 5px;
+          font-size: 1.8em;
         }
 
         .rainfall-amount {
-            font-size: 2em;
-            color: #667eea;
-            font-weight: bold;
-            margin: 10px 0;
+          font-size: 1.5em;
         }
-
-        .rainfall-item.today .rainfall-amount {
-            color: #4caf50;
-        }
-
-        .time-range {
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #999;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .rainfall-amount {
-                font-size: 1.5em;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🌧️ Elderly Hillberry Weather Station</h1>
-        <div class="subtitle">7-Day Precipitation Report</div>
-        <div class="current-time" id="current-time">Loading...</div>
-        <div id="content">
-            <div class="loading">Fetching rainfall data...</div>
-        </div>
+      <h1>🌧️ Elderly Hillberry Weather Station</h1>
+      <div class="subtitle">7-Day Precipitation Report</div>
+      <div class="current-time" id="current-time">Loading...</div>
+      <div id="content">
+        <div class="loading">Fetching rainfall data...</div>
+      </div>
     </div>
 
     <script>
-        // Update current time
-        function updateCurrentTime() {
-            const now = new Date();
-            document.getElementById('current-time').textContent = 
-                'Current Time: ' + now.toLocaleString();
-        }
+      // Update current time
+      function updateCurrentTime() {
+        const now = new Date();
+        document.getElementById("current-time").textContent =
+          "Current Time: " + now.toLocaleString();
+      }
 
-        // Fetch rainfall data
-        async function fetchRainfallData() {
-            try {
-                const response = await fetch('/.netlify/functions/get-rainfall?days=7');
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to fetch data');
-                }
+      // Fetch rainfall data
+      async function fetchRainfallData() {
+        try {
+          const response = await fetch(
+            "/.netlify/functions/get-rainfall?days=7"
+          );
 
-                if (data.error) {
-                    throw new Error(data.error);
-                }
+          const data = await response.json();
 
-                displayRainfallData(data);
-                
-            } catch (error) {
-                document.getElementById('content').innerHTML = 
-                    `<div class="error">
+          if (!response.ok) {
+            throw new Error(data.error || "Failed to fetch data");
+          }
+
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          displayRainfallData(data);
+        } catch (error) {
+          document.getElementById("content").innerHTML = `<div class="error">
                         <strong>Error loading rainfall data:</strong><br>
                         ${error.message}<br><br>
                         <small>Please check that environment variables (API_KEY and DEVICE_ID) are set in Netlify.</small>
                     </div>`;
-            }
         }
+      }
 
-        // Display rainfall data
-        function displayRainfallData(data) {
-            const today = new Date().toLocaleDateString();
-            
-            let html = '<ul class="rainfall-list">';
-            
-            data.days.forEach((day, index) => {
-                const isToday = index === 0;
-                const dayLabel = isToday ? 'Today' : 
-                               index === 1 ? 'Yesterday' : 
-                               `${index} days ago`;
-                
-                html += `
-                    <li class="rainfall-item ${isToday ? 'today' : ''}">
+      // Display rainfall data
+      function displayRainfallData(data) {
+        const today = new Date().toLocaleDateString();
+
+        let html = '<ul class="rainfall-list">';
+
+        data.days.forEach((day, index) => {
+          const isToday = index === 0;
+          const dayLabel = isToday
+            ? "Today"
+            : index === 1
+            ? "Yesterday"
+            : `${index} days ago`;
+
+          html += `
+                    <li class="rainfall-item ${isToday ? "today" : ""}">
                         <div class="day-label">${dayLabel}</div>
-                        <div class="rainfall-amount">${day.rainfallInches}" rain</div>
-                        <div class="time-range">${day.startTime} → ${day.endTime}</div>
+                        <div class="rainfall-amount">${
+                          day.rainfallInches
+                        }" rain</div>
+                        <div class="time-range">${day.startTime} → ${
+            day.endTime
+          }</div>
                         <div class="time-range">(${day.rainfallMM} mm)</div>
                     </li>
                 `;
-            });
-            
-            html += '</ul>';
-            
-            document.getElementById('content').innerHTML = html;
-        }
+        });
 
-        // Initialize
-        updateCurrentTime();
-        setInterval(updateCurrentTime, 1000); // Update time every second
-        fetchRainfallData();
+        html += "</ul>";
+
+        document.getElementById("content").innerHTML = html;
+      }
+
+      // Initialize
+      updateCurrentTime();
+      setInterval(updateCurrentTime, 1000); // Update time every second
+      fetchRainfallData();
     </script>
-</body>
+  </body>
 </html>

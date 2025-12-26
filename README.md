@@ -59,6 +59,7 @@ netlify dev
 ## API
 
 The serverless function is accessible at:
+
 ```
 /.netlify/functions/get-rainfall?days=7
 ```
