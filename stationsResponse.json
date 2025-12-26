@@ -1,0 +1,111 @@
+{
+  "stations": [
+    {
+      "created_epoch": 1766680768,
+      "devices": [
+        {
+          "device_id": 470284,
+          "device_meta": {
+            "agl": 1.8288,
+            "environment": "indoor",
+            "name": "HB-00207268",
+            "wifi_network_name": ""
+          },
+          "device_type": "HB",
+          "firmware_revision": "309",
+          "hardware_revision": "2",
+          "location_id": 202718,
+          "serial_number": "HB-00207268"
+        },
+        {
+          "device_id": 470287,
+          "device_meta": {
+            "agl": 1.8288,
+            "environment": "outdoor",
+            "name": "ST-00197939",
+            "wifi_network_name": ""
+          },
+          "device_settings": { "show_precip_final": true },
+          "device_type": "ST",
+          "firmware_revision": "185",
+          "hardware_revision": "1",
+          "location_id": 202718,
+          "serial_number": "ST-00197939"
+        }
+      ],
+      "is_local_mode": false,
+      "last_modified_epoch": 1766680768,
+      "latitude": 47.87855,
+      "location_id": 202718,
+      "longitude": -122.00607,
+      "name": "Elderly Hillberries",
+      "public_name": "Bear Mountain Rd SE",
+      "state": 1,
+      "station_id": 202718,
+      "station_items": [
+        {
+          "device_id": 470287,
+          "item": "air_temperature_humidity",
+          "location_id": 202718,
+          "location_item_id": 1547361,
+          "sort": 0,
+          "station_id": 202718,
+          "station_item_id": 1547361
+        },
+        {
+          "device_id": 470287,
+          "item": "barometric_pressure",
+          "location_id": 202718,
+          "location_item_id": 1547363,
+          "sort": 1,
+          "station_id": 202718,
+          "station_item_id": 1547363
+        },
+        {
+          "device_id": 470287,
+          "item": "light",
+          "location_id": 202718,
+          "location_item_id": 1547365,
+          "sort": 4,
+          "station_id": 202718,
+          "station_item_id": 1547365
+        },
+        {
+          "device_id": 470287,
+          "item": "lightning",
+          "location_id": 202718,
+          "location_item_id": 1547362,
+          "sort": 2,
+          "station_id": 202718,
+          "station_item_id": 1547362
+        },
+        {
+          "device_id": 470287,
+          "item": "rain",
+          "location_id": 202718,
+          "location_item_id": 1547364,
+          "sort": 5,
+          "station_id": 202718,
+          "station_item_id": 1547364
+        },
+        {
+          "device_id": 470287,
+          "item": "wind",
+          "location_id": 202718,
+          "location_item_id": 1547366,
+          "sort": 3,
+          "station_id": 202718,
+          "station_item_id": 1547366
+        }
+      ],
+      "station_meta": {
+        "elevation": 42.8790168762207,
+        "share_with_wf": true,
+        "share_with_wu": false
+      },
+      "timezone": "America/Los_Angeles",
+      "timezone_offset_minutes": -480
+    }
+  ],
+  "status": { "status_code": 0, "status_message": "SUCCESS" }
+}
