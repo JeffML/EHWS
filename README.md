@@ -18,8 +18,9 @@ In your Netlify site dashboard:
 
 1. Go to **Site settings** > **Environment variables**
 2. Add the following variables:
-   - `API_KEY`: Your Tempest API key
-   - `DEVICE_ID`: Your Tempest device ID
+   - `API_KEY`: Your Tempest API key (Personal Access Token)
+   - `DEVICE_ID`: Your Tempest device ID (e.g., `470287`)
+   - `TZ`: Your timezone (e.g., `America/Los_Angeles`, `America/New_York`, `America/Chicago`)
 
 ### 3. Deploy
 
@@ -34,8 +35,9 @@ To test locally with Netlify CLI:
 npm install -g netlify-cli
 
 # Create a .env file with your variables
-echo "API_KEY=your_key_here" > .env
+echo "API_KEY=your_api_key_here" > .env
 echo "DEVICE_ID=your_device_id" >> .env
+echo "TZ=America/Los_Angeles" >> .env
 
 # Run locally
 netlify dev
@@ -54,7 +56,17 @@ netlify dev
 - `index.html` - Main web page
 - `netlify/functions/get-rainfall.js` - Serverless function to fetch weather data
 - `netlify.toml` - Netlify configuration
-- `.env.example` - Example environment variables
+- `copilot-instructions.md` - API reference URLs
+
+## How It Works
+
+The site fetches weather data from the Tempest API using 7am-7am time periods in your local timezone. The serverless function:
+
+1. Converts current time to your timezone (set via `TZ` env var)
+2. Calculates 7am yesterday to 7am today for each of the last 7 days
+3. Fetches observations from the device API endpoint
+4. Sums up rainfall accumulation (index 12 in obs array) for each period
+5. Returns formatted data with timestamps and rainfall in both mm and inches
 
 ## API
 

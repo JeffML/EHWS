@@ -4,13 +4,7 @@ exports.handler = async (event, context) => {
   // Get environment variables
   const API_KEY = process.env.API_KEY;
   const DEVICE_ID = process.env.DEVICE_ID;
-  const TZ = process.env.TZ || 'America/New_York';
-
-  console.log("Environment check:", {
-    hasApiKey: !!API_KEY,
-    hasDeviceId: !!DEVICE_ID,
-    timezone: TZ,
-  });
+  const TZ = process.env.TZ || "America/New_York";
 
   if (!API_KEY || !DEVICE_ID) {
     return {
@@ -31,26 +25,22 @@ exports.handler = async (event, context) => {
   const getRainfallForDay = (daysAgo) => {
     return new Promise((resolve, reject) => {
       const now = new Date();
-      
+
       // Get the current date in the target timezone
-      const dateInTZ = new Date(now.toLocaleString('en-US', { timeZone: TZ }));
-      
+      const dateInTZ = new Date(now.toLocaleString("en-US", { timeZone: TZ }));
+
       // Calculate 7am dates
       const endDate = new Date(dateInTZ);
       endDate.setDate(endDate.getDate() - daysAgo);
       endDate.setHours(7, 0, 0, 0);
-      
+
       const startDate = new Date(endDate);
       startDate.setDate(startDate.getDate() - 1);
-      
+
       const timeStart = Math.floor(startDate.getTime() / 1000);
       const timeEnd = Math.floor(endDate.getTime() / 1000);
 
-      console.log(`Day ${daysAgo}: ${startDate.toISOString()} to ${endDate.toISOString()} (timestamps: ${timeStart} to ${timeEnd})`);
-
       const url = `https://swd.weatherflow.com/swd/rest/observations/device/${DEVICE_ID}?time_start=${timeStart}&time_end=${timeEnd}&api_key=${API_KEY}`;
-      
-      console.log(`Day ${daysAgo} URL:`, url.replace(API_KEY, 'REDACTED'));
 
       https
         .get(url, (res) => {
@@ -63,12 +53,6 @@ exports.handler = async (event, context) => {
           res.on("end", () => {
             try {
               const json = JSON.parse(data);
-
-              console.log(`Day ${daysAgo} response:`, {
-                hasObs: !!json.obs,
-                obsCount: json.obs?.length || 0,
-                status: json.status
-              });
 
               if (!json.obs || json.obs.length === 0) {
                 resolve({
@@ -88,8 +72,6 @@ exports.handler = async (event, context) => {
               });
 
               const totalRainInches = totalRainMM / 25.4;
-
-              console.log(`Day ${daysAgo}: Found ${json.obs.length} observations, total rain: ${totalRainMM}mm (${totalRainInches.toFixed(2)} inches)`);
 
               resolve({
                 date: endDate.toLocaleDateString(),
