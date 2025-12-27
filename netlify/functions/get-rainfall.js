@@ -49,6 +49,8 @@ exports.handler = async (event, context) => {
       console.log(`Day ${daysAgo}: ${startDate.toISOString()} to ${endDate.toISOString()} (timestamps: ${timeStart} to ${timeEnd})`);
 
       const url = `https://swd.weatherflow.com/swd/rest/observations/device/${DEVICE_ID}?time_start=${timeStart}&time_end=${timeEnd}&api_key=${API_KEY}`;
+      
+      console.log(`Day ${daysAgo} URL:`, url.replace(API_KEY, 'REDACTED'));
 
       https
         .get(url, (res) => {
