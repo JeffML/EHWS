@@ -21,8 +21,13 @@ exports.handler = async (event, context) => {
     const dateInTZ = new Date(now.toLocaleString('en-US', { timeZone: TZ }));
     
     // Calculate 7am today
-    const todayAt7AM = new Date(dateInTZ);
+    let todayAt7AM = new Date(dateInTZ);
     todayAt7AM.setHours(7, 0, 0, 0);
+    
+    // If current time is before 7am, use yesterday's 7am
+    if (dateInTZ.getHours() < 7) {
+      todayAt7AM.setDate(todayAt7AM.getDate() - 1);
+    }
     
     const timeStart = Math.floor(todayAt7AM.getTime() / 1000);
     const timeEnd = Math.floor(Date.now() / 1000);
