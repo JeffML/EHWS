@@ -1,6 +1,6 @@
 {
   "name": "elderly-hillberry-weather-station",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Netlify-hosted website displaying 7-day precipitation data from a Tempest weather station",
   "repository": {
     "type": "git",
