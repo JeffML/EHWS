@@ -21,22 +21,20 @@ exports.handler = async (event, context) => {
   // Get number of days from query parameter (default 7)
   const days = parseInt(event.queryStringParameters?.days || "7");
 
-  // Function to fetch rainfall for a specific day
-  const getRainfallForDay = (daysAgo) => {
+  const now = new Date();
+  const dateInTZ = new Date(now.toLocaleString("en-US", { timeZone: TZ }));
+  const baseDate = new Date(dateInTZ);
+  const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    timeZone: TZ,
+  });
+
+  if (dateInTZ.getHours() < 7) {
+    baseDate.setDate(baseDate.getDate() - 1);
+  }
+
+  const getRainfallForRange = (startDate, endDate, cycleLabel) => {
     return new Promise((resolve, reject) => {
-      const now = new Date();
-
-      // Get the current date in the target timezone
-      const dateInTZ = new Date(now.toLocaleString("en-US", { timeZone: TZ }));
-
-      // Calculate 7am dates
-      const endDate = new Date(dateInTZ);
-      endDate.setDate(endDate.getDate() - daysAgo);
-      endDate.setHours(7, 0, 0, 0);
-
-      const startDate = new Date(endDate);
-      startDate.setDate(startDate.getDate() - 1);
-
       const timeStart = Math.floor(startDate.getTime() / 1000);
       const timeEnd = Math.floor(endDate.getTime() / 1000);
 
@@ -56,6 +54,7 @@ exports.handler = async (event, context) => {
 
               if (!json.obs || json.obs.length === 0) {
                 resolve({
+                  cycleLabel,
                   date: endDate.toLocaleDateString(),
                   startTime: startDate.toLocaleString(),
                   endTime: endDate.toLocaleString(),
@@ -65,7 +64,6 @@ exports.handler = async (event, context) => {
                 return;
               }
 
-              // Calculate total rainfall (index 12 is rain_accumulation in mm)
               let totalRainMM = 0;
               json.obs.forEach((obs) => {
                 totalRainMM += obs[12];
@@ -74,6 +72,7 @@ exports.handler = async (event, context) => {
               const totalRainInches = totalRainMM / 25.4;
 
               resolve({
+                cycleLabel,
                 date: endDate.toLocaleDateString(),
                 startTime: startDate.toLocaleString(),
                 endTime: endDate.toLocaleString(),
@@ -91,6 +90,22 @@ exports.handler = async (event, context) => {
     });
   };
 
+  // Function to fetch rainfall for a specific day
+  const getRainfallForDay = (daysAgo) => {
+    // Calculate 7am dates
+    const endDate = new Date(baseDate);
+    endDate.setDate(endDate.getDate() - daysAgo);
+    endDate.setHours(7, 0, 0, 0);
+
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - 1);
+
+    const startWeekday = weekdayFormatter.format(startDate);
+    const endWeekday = weekdayFormatter.format(endDate);
+
+    return getRainfallForRange(startDate, endDate, `${startWeekday}-${endWeekday}`);
+  };
+
   try {
     // Fetch rainfall for all requested days
     const promises = [];
@@ -99,6 +114,21 @@ exports.handler = async (event, context) => {
     }
 
     const results = await Promise.all(promises);
+
+    if (dateInTZ.getHours() >= 7) {
+      const currentStart = new Date(dateInTZ);
+      currentStart.setHours(7, 0, 0, 0);
+
+      const currentEnd = new Date(dateInTZ);
+
+      const currentCycle = await getRainfallForRange(
+        currentStart,
+        currentEnd,
+        "Current Cycle"
+      );
+
+      results.unshift(currentCycle);
+    }
 
     return {
       statusCode: 200,

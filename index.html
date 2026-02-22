@@ -229,20 +229,13 @@
 
       // Display rainfall data
       function displayRainfallData(data) {
-        const today = new Date().toLocaleDateString();
-
         let html = '<ul class="rainfall-list">';
 
-        data.days.forEach((day, index) => {
-          const isToday = index === 0;
-          const dayLabel = isToday
-            ? "Today"
-            : index === 1
-            ? "Yesterday"
-            : `${index} days ago`;
+        data.days.forEach((day) => {
+          const dayLabel = day.cycleLabel || "7am-7am";
 
           html += `
-                    <li class="rainfall-item ${isToday ? "today" : ""}">
+                    <li class="rainfall-item">
                         <div class="day-label">${dayLabel}</div>
                         <div class="rainfall-amount">${
                           day.rainfallInches
