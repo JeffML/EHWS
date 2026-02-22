@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -73,7 +73,9 @@
         margin-bottom: 15px;
         border-radius: 10px;
         border-left: 5px solid #667eea;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
       }
 
       .rainfall-item:hover {
@@ -136,7 +138,18 @@
       <h1>🌧️ Elderly Hillberry Weather Station</h1>
       <div class="subtitle">7-Day Precipitation Report</div>
       <div class="current-time" id="current-time">Loading...</div>
-      <div class="current-conditions" id="current-conditions" style="text-align: center; color: #666; font-size: 1.1em; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee;">
+      <div
+        class="current-conditions"
+        id="current-conditions"
+        style="
+          text-align: center;
+          color: #666;
+          font-size: 1.1em;
+          margin-bottom: 20px;
+          padding-bottom: 20px;
+          border-bottom: 2px solid #eee;
+        "
+      >
         <span id="conditions-text">Loading current conditions...</span>
       </div>
       <div id="content">
@@ -154,7 +167,7 @@
 
       // Get wind direction arrow
       function getWindArrow(degrees) {
-        const arrows = ['↓', '↙', '←', '↖', '↑', '↗', '→', '↘'];
+        const arrows = ["↓", "↙", "←", "↖", "↑", "↗", "→", "↘"];
         const index = Math.round(degrees / 45) % 8;
         return arrows[index];
       }
@@ -170,19 +183,19 @@
           }
 
           // Convert temperature to Fahrenheit
-          const tempF = Math.round((data.temperature * 9/5) + 32);
-          
+          const tempF = Math.round((data.temperature * 9) / 5 + 32);
+
           // Convert wind speed from m/s to mph
           const windMph = Math.round(data.windSpeed * 2.237);
-          
+
           const windArrow = getWindArrow(data.windDirection);
 
           // Get temperature color (blue at 32°F, red at 90°F, gradient in between)
           let tempColor;
           if (tempF <= 32) {
-            tempColor = '#2196F3'; // blue
+            tempColor = "#2196F3"; // blue
           } else if (tempF >= 90) {
-            tempColor = '#f44336'; // red
+            tempColor = "#f44336"; // red
           } else {
             // Gradient from blue to red
             const ratio = (tempF - 32) / (90 - 32);
@@ -192,10 +205,10 @@
             tempColor = `rgb(${r}, ${g}, ${b})`;
           }
 
-          document.getElementById("conditions-text").innerHTML = 
+          document.getElementById("conditions-text").innerHTML =
             `<strong>Now:</strong> <span style="color: ${tempColor}; font-weight: bold; font-size: 1.2em;">${tempF}°F</span> | ${windMph} mph <span style="font-size: 1.5em;">${windArrow}</span> | <span style="font-weight: bold; color: #667eea; font-size: 1.15em;">${data.rainfallToday}" rain</span> since 7am`;
         } catch (error) {
-          document.getElementById("conditions-text").textContent = 
+          document.getElementById("conditions-text").textContent =
             "Current conditions unavailable";
         }
       }
@@ -204,7 +217,7 @@
       async function fetchRainfallData() {
         try {
           const response = await fetch(
-            "/.netlify/functions/get-rainfall?days=7"
+            "/.netlify/functions/get-rainfall?days=7",
           );
 
           const data = await response.json();
@@ -241,8 +254,8 @@
                           day.rainfallInches
                         }" rain</div>
                         <div class="time-range">${day.startTime} → ${
-            day.endTime
-          }</div>
+                          day.endTime
+                        }</div>
                         <div class="time-range">(${day.rainfallMM} mm)</div>
                     </li>
                 `;

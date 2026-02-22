@@ -103,7 +103,11 @@ exports.handler = async (event, context) => {
     const startWeekday = weekdayFormatter.format(startDate);
     const endWeekday = weekdayFormatter.format(endDate);
 
-    return getRainfallForRange(startDate, endDate, `${startWeekday}-${endWeekday}`);
+    return getRainfallForRange(
+      startDate,
+      endDate,
+      `${startWeekday}-${endWeekday}`,
+    );
   };
 
   try {
@@ -124,7 +128,7 @@ exports.handler = async (event, context) => {
       const currentCycle = await getRainfallForRange(
         currentStart,
         currentEnd,
-        "Current Cycle"
+        "Current Cycle",
       );
 
       results.unshift(currentCycle);
